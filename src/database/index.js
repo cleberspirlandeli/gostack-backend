@@ -25,16 +25,13 @@ class Database {
     }
 
     mongo() {
-        this.mongoConnection = mongoose.connect(
-            'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=false',
-            //'mongodb://localhost:27027/gobarber',
-            {
-                useNewUrlParser: true,
-                useFindAndModify: true,
-                useUnifiedTopology: true,
-                useCreateIndex: true,
-            }
-        );
+        // docker run --name dbmongo -p 27017:27017 -d -t mongo
+        this.mongoConnection = mongoose.connect(process.env.DB_MONGO_URL, {
+            useNewUrlParser: true,
+            useFindAndModify: true,
+            useUnifiedTopology: true,
+            useCreateIndex: true,
+        });
     }
 }
 

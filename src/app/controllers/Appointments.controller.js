@@ -78,7 +78,6 @@ class AppointmentsController {
          * Check for past dates
          */
         const hourStart = startOfHour(parseISO(date));
-        console.log(hourStart);
 
         if (isBefore(hourStart, new Date()))
             return res

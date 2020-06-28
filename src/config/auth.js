@@ -1,4 +1,5 @@
 export default {
-    secret: '1a2b3c_GERAR_HASH',
+    secret: process.env.AUTH_SECRET,
     expiresIn: '1d',
+    tokenVersion: process.env.TOKEN_VERSION,
 };

@@ -49,7 +49,7 @@ const storageTypes = {
 
 module.exports = {
     dest: path.resolve(__dirname, '..', '..', 'temp'),
-    storage: storageTypes['local'],
+    storage: storageTypes[process.env.STORAGE_TYPES],
     fileFilter: function (req, file, callback) {
         const allowedMines = ['image/png', 'image/jpg', 'image/jpeg'];
 
