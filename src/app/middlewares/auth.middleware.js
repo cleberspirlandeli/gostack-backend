@@ -8,12 +8,17 @@ import authConfig from './../../config/auth';
 export default async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
-    if (!authHeader) res.status(401).json({ error: 'Token not provided' });
+    if (!authHeader)
+        return res.status(401).json({ error: 'Token not provided' });
 
     const [, token] = authHeader.split(' ');
 
     try {
         const decoded = await promisify(jwt.verify)(token, authConfig.secret);
+
+        // process.env.TOKEN_VERSION
+        if (decoded.tokenVersion !== 'BarberGo1.0.0')
+            res.status(401).json({ error: 'Mismatched token version' });
 
         req.userId = decoded.id;
         req.userName = decoded.name;

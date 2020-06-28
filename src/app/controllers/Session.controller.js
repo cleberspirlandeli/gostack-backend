@@ -25,6 +25,7 @@ class SessionController {
         if (!(await user.checkPassword(password)))
             return res.status(401).json({ error: 'Password does not match.' });
 
+        const tokenVersion = 'BarberGo1.0.0'; // process.env.TOKEN_VERSION
         const { id, name } = user;
         res.status(201).json({
             user: {
@@ -32,9 +33,13 @@ class SessionController {
                 name,
                 email,
             },
-            token: jwt.sign({ id, name, email }, authConfig.secret, {
-                expiresIn: authConfig.expiresIn,
-            }),
+            token: jwt.sign(
+                { id, name, email, tokenVersion },
+                authConfig.secret,
+                {
+                    expiresIn: authConfig.expiresIn,
+                }
+            ),
         });
     }
 }
