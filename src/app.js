@@ -3,6 +3,9 @@ import express from 'express';
 import path from 'path';
 import Youch from 'youch';
 import helmet from 'helmet';
+import redis from 'redis';
+import RateLimit from 'express-rate-limit';
+import RateLimitRedis from 'rate-limit-redis';
 import * as Sentry from '@sentry/node';
 import 'express-async-errors';
 import routes from './routes';
@@ -27,6 +30,21 @@ class App {
             '/public',
             express.static(path.resolve(__dirname, '..', 'temp'))
         );
+
+        if (process.env.NODE_ENV !== 'developer') {
+            this.server.use(
+                new RateLimit({
+                    store: new RateLimitRedis({
+                        client: redis.createClient({
+                            host: process.env.REDIS_HOST,
+                            port: process.env.REDIS_PORT,
+                        }),
+                    }),
+                    windowMs: 1000 * 60 * 15, // 15min,
+                    max: 100,
+                })
+            );
+        }
     }
 
     routes() {
